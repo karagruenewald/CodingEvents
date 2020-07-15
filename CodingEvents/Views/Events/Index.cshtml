@@ -5,21 +5,24 @@
 }
 @*<link rel="stylesheet" type="text/css" href="~/css/table.css">*@
 <h2>Events Lists</h2>
-<a style ="text-decoration: underline" class="nav-link text-dark" asp-area="" asp-controller="Events" asp-action="Add">Add Event</a>
-
+<a style ="color: red; text-decoration: underline" class="nav-link text-dark" asp-area="" asp-controller="Events" asp-action="Add">Add Events</a>
+<a style="color: red; text-decoration: underline" class="nav-link text-dark" asp-area="" asp-controller="Events" asp-action="Delete">Delete Events</a>
 <table class="table table-striped">
     <tr>
+        <th>ID</th>
         <th>Event</th>
         <th>Description</th>
     </tr>
 
-    @foreach (KeyValuePair<string, string> item in ViewBag.events)
+    @foreach (var evt in ViewBag.events)
     {
-        <tr>
-            <td>@item.Key</td>
-            <td>@item.Value</td>
+<tr>
+    <td>@evt.Id</td>
+    <td>@evt.Name</td>
+    <td>@evt.Description</td>
 
-        </tr>
+
+</tr>
     }
 
 </table>
