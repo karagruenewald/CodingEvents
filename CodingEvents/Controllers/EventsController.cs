@@ -53,5 +53,28 @@ namespace CodingEvents.Controllers
 
             return Redirect("/Events");
         }
+
+        [Route("/Events/Edit/{eventId}")]
+        public IActionResult Edit (int eventId)
+        {
+            //allows us to grab the values of the event we're trying to edit
+            ViewBag.events = EventData.GetById(eventId);
+            ViewBag.title = "Edit Event: " + ViewBag.events.Name + "(id=" + ViewBag.events.Id + ")";
+            return View();
+        }
+
+        [HttpPost]
+        [Route("/Events/Edit")]
+        public IActionResult SubmitEditEvenForm(int eventId, string name, string description)
+        {
+            
+            Event updated = EventData.GetById(eventId);
+            updated.Name = name;
+            updated.Description = description;
+            //because it grabbed the specific object, it will update the object values
+
+
+            return Redirect("/Events");
+        }
     }
 }
