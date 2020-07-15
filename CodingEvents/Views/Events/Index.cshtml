@@ -3,13 +3,23 @@
 *@
 @{
 }
-
+@*<link rel="stylesheet" type="text/css" href="~/css/table.css">*@
 <h2>Events Lists</h2>
+<a style ="text-decoration: underline" class="nav-link text-dark" asp-area="" asp-controller="Events" asp-action="Add">Add Event</a>
 
-<ul>
+<table class="table table-striped">
+    <tr>
+        <th>Event</th>
+        <th>Description</th>
+    </tr>
 
-    @foreach (string item in ViewBag.events){
+    @foreach (KeyValuePair<string, string> item in ViewBag.events)
+    {
+        <tr>
+            <td>@item.Key</td>
+            <td>@item.Value</td>
 
-        <li>@item</li>
+        </tr>
     }
-</ul>
+
+</table>
