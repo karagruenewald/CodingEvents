@@ -3,7 +3,10 @@
 *@
 @{
 }
-@*<link rel="stylesheet" type="text/css" href="~/css/table.css">*@
+
+@using CodingEvents.Models
+@model List<Event>
+
 <h2>Events Lists</h2>
 <a style ="color: red; text-decoration: underline" class="nav-link text-dark" asp-area="" asp-controller="Events" asp-action="Add">Add Events</a>
 <a style="color: red; text-decoration: underline" class="nav-link text-dark" asp-area="" asp-controller="Events" asp-action="Delete">Delete Events</a>
@@ -12,17 +15,20 @@
         <th>ID</th>
         <th>Event</th>
         <th>Description</th>
+        <th>Contact Email</th>
+        <th>Edit</th>
     </tr>
 
-    @foreach (var evt in ViewBag.events)
+    @foreach (var evt in Model)
     {
-<tr>
-    <td>@evt.Id</td>
-    <td>@evt.Name</td>
-    <td>@evt.Description</td>
+    <tr>
+        <td>@evt.Id</td>
+        <td>@evt.Name</td>
+        <td>@evt.Description</td>
+        <td>@evt.ContactEmail</td>
+        <td><a asp-controller="Events" asp-action="Edit" asp-route-id="@evt.Id">Edit Event</a></td>
 
-
-</tr>
+    </tr>
     }
 
 </table>
