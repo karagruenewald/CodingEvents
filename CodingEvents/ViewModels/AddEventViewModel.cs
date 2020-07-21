@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using CodingEvents.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CodingEvents.ViewModels
 {
@@ -30,6 +33,23 @@ namespace CodingEvents.ViewModels
         [Range(0,100000, ErrorMessage ="Number must be between 0 and 100,000.")]
         [Display(Name="Number of Attendees")]
         public int NumOfAttendees { get; set; }
+
+        [Display(Name="Event Type")]
+        public EventType Type { get; set; }
+
+        //each item represents one of the enum values
+        //allows View Model to help View generate drop down menu
+        public List<SelectListItem> EventTypes { get; set; } = new List<SelectListItem>
+        {
+            //for a new Select List Item we need to pass in what we want it to say(string), and then the value of the enum(as a string)
+            //for value of enum, we have to first cast the enum as an integer to get the number and then back to a string
+            new SelectListItem(EventType.Conference.ToString(), ((int)EventType.Conference).ToString()),
+            new SelectListItem(EventType.Meetup.ToString(), ((int)EventType.Meetup).ToString()),
+            new SelectListItem(EventType.Social.ToString(), ((int)EventType.Social).ToString()),
+            new SelectListItem(EventType.Workshop.ToString(), ((int)EventType.Workshop).ToString())
+
+        };
+
 
         public AddEventViewModel()
         {
