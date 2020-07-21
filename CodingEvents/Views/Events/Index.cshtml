@@ -16,6 +16,8 @@
         <th>Event</th>
         <th>Description</th>
         <th>Contact Email</th>
+        <th>Location</th>
+        <th>Number of Attendees</th>
         <th>Edit</th>
     </tr>
 
@@ -26,6 +28,8 @@
         <td>@evt.Name</td>
         <td>@evt.Description</td>
         <td>@evt.ContactEmail</td>
+        <td>@evt.Location</td>
+        <td>@evt.NumOfAttendees</td>
         <td><a asp-controller="Events" asp-action="Edit" asp-route-id="@evt.Id">Edit Event</a></td>
 
     </tr>

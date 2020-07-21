@@ -44,7 +44,9 @@ namespace CodingEvents.Controllers
                 {
                     Name = addEventViewModel.Name,
                     Description = addEventViewModel.Description,
-                    ContactEmail = addEventViewModel.ContactEmail
+                    ContactEmail = addEventViewModel.ContactEmail,
+                    Location = addEventViewModel.Location,
+                    NumOfAttendees = addEventViewModel.NumOfAttendees
 
                 }; //this allows us to directly set the properties we want, still calls the default constructor of Event class
 

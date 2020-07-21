@@ -21,6 +21,16 @@ namespace CodingEvents.ViewModels
         [Display(Name="Contact's Email")]
         public string ContactEmail { get; set; }
 
+
+        [Required(ErrorMessage ="Location is required")]
+        [Display(Name = "Event's Location")]
+        public string Location { get; set; }
+
+
+        [Range(0,100000, ErrorMessage ="Number must be between 0 and 100,000.")]
+        [Display(Name="Number of Attendees")]
+        public int NumOfAttendees { get; set; }
+
         public AddEventViewModel()
         {
         }
