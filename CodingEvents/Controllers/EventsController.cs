@@ -13,13 +13,22 @@ namespace CodingEvents.Controllers
 {
     public class EventsController : Controller
     {
+        private EventDbContext context;
+
+        //must set this constructor to use EventsDbContext
+        public EventsController(EventDbContext dbContext)
+        {
+            context = dbContext;
+        }
+
 
         // GET: /<controller>/
         [HttpGet]
         public IActionResult Index()
         {
 
-            List<Event> events = new List<Event>(EventData.GetAll());
+            //List<Event> events = new List<Event>(EventData.GetAll()); - used before hooking up to database
+            List<Event> events = context.Events.ToList();
             return View(events);
         }
 
@@ -51,7 +60,12 @@ namespace CodingEvents.Controllers
 
                 }; //this allows us to directly set the properties we want, still calls the default constructor of Event class
 
-                EventData.Add(newEvent);
+                //EventData.Add(newEvent); - used before having the database
+
+                context.Events.Add(newEvent);
+                context.SaveChanges();
+
+
                 return Redirect("/events");
 
             }
@@ -63,7 +77,8 @@ namespace CodingEvents.Controllers
 
         public IActionResult Delete ()
         {
-            ViewBag.events = EventData.GetAll();
+            //ViewBag.events = EventData.GetAll();
+            ViewBag.events = context.Events.ToList();
 
             return View();
         }
@@ -73,8 +88,12 @@ namespace CodingEvents.Controllers
         {
             foreach(int id in eventIds)
             {
-                EventData.Remove(id);
+                //EventData.Remove(id);
+                Event e = context.Events.Find(id);
+                context.Events.Remove(e);
             }
+
+            context.SaveChanges();
 
             return Redirect("/Events");
         }
@@ -82,8 +101,11 @@ namespace CodingEvents.Controllers
         [Route("/Events/Edit/{eventId}")]
         public IActionResult Edit (int eventId)
         {
+
+            Event evt = context.Events.Find(eventId);
+
             //allows us to grab the values of the event we're trying to edit
-            ViewBag.events = EventData.GetById(eventId);
+            ViewBag.events = evt;
             ViewBag.title = "Edit Event: " + ViewBag.events.Name + "(id=" + ViewBag.events.Id + ")";
             return View();
         }
@@ -93,11 +115,13 @@ namespace CodingEvents.Controllers
         public IActionResult SubmitEditEvenForm(int eventId, string name, string description, string email)
         {
             
-            Event updated = EventData.GetById(eventId);
+            Event updated = context.Events.Find(eventId);
             updated.Name = name;
             updated.Description = description;
             updated.ContactEmail = email;
             //because it grabbed the specific object, it will update the object values
+
+            context.SaveChanges();
 
 
             return Redirect("/Events");

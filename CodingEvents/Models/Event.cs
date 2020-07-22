@@ -11,18 +11,17 @@ namespace CodingEvents.Models
 
         public EventType Type { get; set; } //EventType.Conference, EventType.Meeting
 
-        public int Id { get; }
-        private static int nextId = 1;
+        //this will be set when we create objects in the database
+        public int Id { get; set; }
+        
 
         //no arg constructor needed for model binding by the framework
         public Event()
-        {
-            Id = nextId;
-            nextId++;
+        {  
         }
 
 
-        public Event(string name, string description, string contactEmail, string location, int numOfAttendees, EventType type): this()
+        public Event(string name, string description, string contactEmail, string location, int numOfAttendees, EventType type)
         {
             Name = name;
             Description = description;
