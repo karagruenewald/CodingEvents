@@ -34,25 +34,57 @@ namespace CodingEvents.ViewModels
         [Display(Name="Number of Attendees")]
         public int NumOfAttendees { get; set; }
 
-        [Display(Name="Event Type")]
-        public EventType Type { get; set; }
+
+
+        //[Display(Name="Event Type")]
+        //public EventType Type { get; set; }
+
+
+
+
+
+
 
         //each item represents one of the enum values
         //allows View Model to help View generate drop down menu
-        public List<SelectListItem> EventTypes { get; set; } = new List<SelectListItem>
+        //public List<SelectListItem> EventTypes { get; set; } = new List<SelectListItem>
+        //{
+        //    //for a new Select List Item we need to pass in what we want it to say(string), and then the value of the enum(as a string)
+        //    //for value of enum, we have to first cast the enum as an integer to get the number and then back to a string
+        //    new SelectListItem(EventType.Conference.ToString(), ((int)EventType.Conference).ToString()),
+        //    new SelectListItem(EventType.Meetup.ToString(), ((int)EventType.Meetup).ToString()),
+        //    new SelectListItem(EventType.Social.ToString(), ((int)EventType.Social).ToString()),
+        //    new SelectListItem(EventType.Workshop.ToString(), ((int)EventType.Workshop).ToString())
+
+        //};
+
+        [Required(ErrorMessage = "Category is required.")]
+        public int CategoryId { get; set; }
+
+        public List<SelectListItem> Categories { get; set; }
+
+
+        //allows us to have select drop down menu in the form able to display all categories
+        public AddEventViewModel(List<EventCategory> categories)
         {
-            //for a new Select List Item we need to pass in what we want it to say(string), and then the value of the enum(as a string)
-            //for value of enum, we have to first cast the enum as an integer to get the number and then back to a string
-            new SelectListItem(EventType.Conference.ToString(), ((int)EventType.Conference).ToString()),
-            new SelectListItem(EventType.Meetup.ToString(), ((int)EventType.Meetup).ToString()),
-            new SelectListItem(EventType.Social.ToString(), ((int)EventType.Social).ToString()),
-            new SelectListItem(EventType.Workshop.ToString(), ((int)EventType.Workshop).ToString())
+            Categories = new List<SelectListItem>();
 
-        };
+            foreach (var category in categories)
+            {
+                Categories.Add(new SelectListItem
+                {
+                    //for drop down menu, goes in html input tags
+                    Value = category.Id.ToString(),
+                    Text = category.Name
+                });
+            }
 
+        }
 
-        public AddEventViewModel()
+        //needed for model binding
+        public AddEventViewModel ()
         {
+
         }
     }
 }

@@ -6,6 +6,7 @@ using CodingEvents.Data;
 using CodingEvents.Models;
 using CodingEvents.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -28,15 +29,19 @@ namespace CodingEvents.Controllers
         {
 
             //List<Event> events = new List<Event>(EventData.GetAll()); - used before hooking up to database
-            List<Event> events = context.Events.ToList();
+
+            // lambda syntax, must grab the categories from category database, by default EF does lazy loading, only loading just the Events table
+            List<Event> events = context.Events.Include(e => e.Category).ToList();
             return View(events);
         }
 
         [HttpGet]
         public IActionResult Add()
         {
+            List<EventCategory> categories = context.EventCategories.ToList();
+
             //becomes representation of what the user is putting into the form
-            AddEventViewModel addEventView = new AddEventViewModel();
+            AddEventViewModel addEventView = new AddEventViewModel(categories);
             return View(addEventView);
         }
 
@@ -48,6 +53,8 @@ namespace CodingEvents.Controllers
 
             if(ModelState.IsValid)
             {
+                //have to grab the CategoryId to assign to Category
+                EventCategory category = context.EventCategories.Find(addEventViewModel.CategoryId);
 
                 Event newEvent = new Event
                 {
@@ -56,11 +63,11 @@ namespace CodingEvents.Controllers
                     ContactEmail = addEventViewModel.ContactEmail,
                     Location = addEventViewModel.Location,
                     NumOfAttendees = addEventViewModel.NumOfAttendees,
-                    Type = addEventViewModel.Type
+                    Category = category
 
                 }; //this allows us to directly set the properties we want, still calls the default constructor of Event class
 
-                //EventData.Add(newEvent); - used before having the database
+                
 
                 context.Events.Add(newEvent);
                 context.SaveChanges();
@@ -125,6 +132,22 @@ namespace CodingEvents.Controllers
 
 
             return Redirect("/Events");
+        }
+
+        public IActionResult Detail (int id)
+        {
+            Event theEvent = context.Events
+                .Include(e => e.Category)
+                .Single(e => e.Id == id);
+
+
+            List<EventTag> eventTags = context.EventTags
+                .Where(et => et.EventId == id)
+                .Include(et => et.Tag)
+                .ToList();
+
+            EventDetailViewModel viewModel = new EventDetailViewModel(theEvent, eventTags);
+            return View(viewModel);
         }
     }
 }

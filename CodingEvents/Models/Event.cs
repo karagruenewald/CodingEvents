@@ -9,7 +9,16 @@ namespace CodingEvents.Models
         public string Location { get; set; }
         public int NumOfAttendees { get; set; }
 
-        public EventType Type { get; set; } //EventType.Conference, EventType.Meeting
+
+        // No longer needed as we have created EventCategory
+        //public EventType Type { get; set; } //EventType.Conference, EventType.Meeting
+
+
+        public EventCategory Category { get; set; }
+
+        public int CategoryId { get; set; }
+
+
 
         //this will be set when we create objects in the database
         public int Id { get; set; }
@@ -21,14 +30,14 @@ namespace CodingEvents.Models
         }
 
 
-        public Event(string name, string description, string contactEmail, string location, int numOfAttendees, EventType type)
+        public Event(string name, string description, string contactEmail, string location, int numOfAttendees)
         {
             Name = name;
             Description = description;
             ContactEmail = contactEmail;
             Location = location;
             NumOfAttendees = numOfAttendees;
-            Type = type;
+            
             
         }
 

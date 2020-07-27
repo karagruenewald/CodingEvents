@@ -1,0 +1,35 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@using CodingEvents.Models
+@model List<Tag>
+
+<h1>Event Tags</h1>
+
+@if (Model.Count == 0)
+{
+    <p>No Tags yet</p>
+}
+else
+{
+    <table class="table table-striped">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+
+        </tr>
+
+        @foreach (var tag in Model)
+        {
+            <tr>
+                <td>@tag.Id</td>
+                <td>@tag.Name</td>
+
+            </tr>
+
+        }
+    </table>
+
+}
