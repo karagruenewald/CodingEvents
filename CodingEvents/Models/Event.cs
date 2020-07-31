@@ -5,17 +5,18 @@ namespace CodingEvents.Models
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public string ContactEmail { get; set; }
+        
         public string Location { get; set; }
         public int NumOfAttendees { get; set; }
 
 
-        // No longer needed as we have created EventCategory
-        //public EventType Type { get; set; } //EventType.Conference, EventType.Meeting
+        //need this for one to many relationship with Contact
+        public Contact Contact { get; set; }
+        public int ContactId { get; set; }
 
 
+        //need this for one to many relationship with Event Category
         public EventCategory Category { get; set; }
-
         public int CategoryId { get; set; }
 
 
@@ -30,11 +31,10 @@ namespace CodingEvents.Models
         }
 
 
-        public Event(string name, string description, string contactEmail, string location, int numOfAttendees)
+        public Event(string name, string description, string location, int numOfAttendees)
         {
             Name = name;
             Description = description;
-            ContactEmail = contactEmail;
             Location = location;
             NumOfAttendees = numOfAttendees;
             

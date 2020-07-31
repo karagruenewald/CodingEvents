@@ -15,10 +15,10 @@
         <th>ID</th>
         <th>Event</th>
         <th>Description</th>
-        <th>Contact Email</th>
         <th>Location</th>
         <th>Number of Attendees</th>
         <th>Category</th>
+        <th>Contact</th>
         <th>Edit</th>
     </tr>
 
@@ -28,10 +28,10 @@
         <td>@evt.Id</td>
         <td><a asp-controller ="Events" asp-action ="Detail" asp-route-id="@evt.Id">@evt.Name</a></td>
         <td>@evt.Description</td>
-        <td>@evt.ContactEmail</td>
         <td>@evt.Location</td>
         <td>@evt.NumOfAttendees</td>
         <td>@evt.Category.Name</td>
+        <td>@evt.Contact.Name</td>
         <td><a asp-controller="Events" asp-action="Edit" asp-route-id="@evt.Id">Edit Event</a></td>
 
     </tr>
