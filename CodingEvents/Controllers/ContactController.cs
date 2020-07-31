@@ -42,6 +42,7 @@ namespace CodingEvents.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Add(AddContactViewModel addContactViewModel)
         {
 
@@ -83,9 +84,13 @@ namespace CodingEvents.Controllers
         private string UploadedFile(AddContactViewModel model)
         {
             string uniqueFileName = null;
-
-            if(model.ProfileImage != null)
+            
+            if (model.ProfileImage != null)
             {
+
+                //in the wild we'd probably want to store the photos on a server so this would change
+                //https://www.c-sharpcorner.com/article/upload-and-display-image-in-asp-net-core-3-1/
+
                 string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "Images");
                 uniqueFileName = Guid.NewGuid().ToString() + "_" + model.ProfileImage.FileName;
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
