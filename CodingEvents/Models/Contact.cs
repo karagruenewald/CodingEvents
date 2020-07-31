@@ -14,6 +14,8 @@ namespace CodingEvents.Models
 
         public List<Event> Events { get; set; }
 
+        public string ProfilePicture { get; set; }
+
 
         public Contact()
         {

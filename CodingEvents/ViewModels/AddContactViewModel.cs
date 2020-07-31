@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace CodingEvents.ViewModels
 {
@@ -23,6 +24,9 @@ namespace CodingEvents.ViewModels
 
 
         public string City { get; set; }
+
+        [Display(Name ="Profile Picture")]
+        public IFormFile ProfileImage { get; set; }
 
 
         public AddContactViewModel()
