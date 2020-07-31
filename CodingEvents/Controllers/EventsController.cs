@@ -31,7 +31,10 @@ namespace CodingEvents.Controllers
             //List<Event> events = new List<Event>(EventData.GetAll()); - used before hooking up to database
 
             // lambda syntax, must grab the categories from category database, by default EF does lazy loading, only loading just the Events table
-            List<Event> events = context.Events.Include(e => e.Category).ToList();
+            List<Event> events = context.Events
+                .Include(e => e.Category)
+                .Include(e => e.Contact)
+                .ToList();
             return View(events);
         }
 
@@ -39,9 +42,10 @@ namespace CodingEvents.Controllers
         public IActionResult Add()
         {
             List<EventCategory> categories = context.EventCategories.ToList();
-
+            List<Contact> contacts = context.Contacts.ToList();
             //becomes representation of what the user is putting into the form
-            AddEventViewModel addEventView = new AddEventViewModel(categories);
+            AddEventViewModel addEventView = new AddEventViewModel(categories, contacts);
+
             return View(addEventView);
         }
 
@@ -55,15 +59,16 @@ namespace CodingEvents.Controllers
             {
                 //have to grab the CategoryId to assign to Category
                 EventCategory category = context.EventCategories.Find(addEventViewModel.CategoryId);
+                Contact contact = context.Contacts.Find(addEventViewModel.ContactId);
 
                 Event newEvent = new Event
                 {
                     Name = addEventViewModel.Name,
                     Description = addEventViewModel.Description,
-                    ContactEmail = addEventViewModel.ContactEmail,
                     Location = addEventViewModel.Location,
                     NumOfAttendees = addEventViewModel.NumOfAttendees,
-                    Category = category
+                    Category = category,
+                    Contact = contact
 
                 }; //this allows us to directly set the properties we want, still calls the default constructor of Event class
 
@@ -119,13 +124,13 @@ namespace CodingEvents.Controllers
 
         [HttpPost]
         [Route("/Events/Edit")]
-        public IActionResult SubmitEditEvenForm(int eventId, string name, string description, string email)
+        public IActionResult SubmitEditEvenForm(int eventId, string name, string description)
         {
             
             Event updated = context.Events.Find(eventId);
             updated.Name = name;
             updated.Description = description;
-            updated.ContactEmail = email;
+            
             //because it grabbed the specific object, it will update the object values
 
             context.SaveChanges();
