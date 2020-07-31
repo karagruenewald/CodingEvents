@@ -23,7 +23,11 @@ namespace CodingEvents.Models
 
         //this will be set when we create objects in the database
         public int Id { get; set; }
-        
+
+
+        //to connect to logged in users who have created the event
+        public string UserId { get; set; }
+
 
         //no arg constructor needed for model binding by the framework
         public Event()

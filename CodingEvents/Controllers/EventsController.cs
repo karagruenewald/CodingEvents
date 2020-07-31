@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using CodingEvents.Data;
 using CodingEvents.Models;
 using CodingEvents.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,28 +14,34 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CodingEvents.Controllers
 {
+    [Authorize]
     public class EventsController : Controller
     {
         private EventDbContext context;
 
+        private readonly UserManager<IdentityUser> _userManager;
+
         //must set this constructor to use EventsDbContext
-        public EventsController(EventDbContext dbContext)
+        public EventsController(EventDbContext dbContext, UserManager<IdentityUser> userManager)
         {
             context = dbContext;
+            _userManager = userManager;
         }
 
 
         // GET: /<controller>/
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Index()
         {
 
-            //List<Event> events = new List<Event>(EventData.GetAll()); - used before hooking up to database
+            var userId = _userManager.GetUserId(User);
 
             // lambda syntax, must grab the categories from category database, by default EF does lazy loading, only loading just the Events table
             List<Event> events = context.Events
                 .Include(e => e.Category)
                 .Include(e => e.Contact)
+                .Where(e => e.UserId== userId)
                 .ToList();
             return View(events);
         }
@@ -57,6 +65,11 @@ namespace CodingEvents.Controllers
 
             if(ModelState.IsValid)
             {
+
+                //grabbing user id
+                var userId = _userManager.GetUserId(User);
+
+
                 //have to grab the CategoryId to assign to Category
                 EventCategory category = context.EventCategories.Find(addEventViewModel.CategoryId);
                 Contact contact = context.Contacts.Find(addEventViewModel.ContactId);
@@ -68,7 +81,8 @@ namespace CodingEvents.Controllers
                     Location = addEventViewModel.Location,
                     NumOfAttendees = addEventViewModel.NumOfAttendees,
                     Category = category,
-                    Contact = contact
+                    Contact = contact,
+                    UserId = userId
 
                 }; //this allows us to directly set the properties we want, still calls the default constructor of Event class
 
